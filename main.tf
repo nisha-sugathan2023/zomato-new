@@ -1,4 +1,3 @@
-
 provider "aws" {}
 
 
@@ -43,4 +42,19 @@ resource "aws_security_group" "webserver" {
     env     = var.project_env
   }
 
+}
+
+resource "aws_instance" "webserver" {
+
+  ami                    = "ami-0d13e3e640877b0b9"
+  instance_type          = "t2.micro"
+  key_name               = "mumbai_new"
+  vpc_security_group_ids = [aws_security_group.webserver.id]
+  user_data              = file("userdata.sh")
+  tags = {
+
+    Name    = "webserver-${var.project_name}-${var.project_env}"
+    project = var.project_name
+    env     = var.project_env
+  }
 }
